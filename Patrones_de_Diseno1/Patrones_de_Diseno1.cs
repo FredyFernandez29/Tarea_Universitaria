@@ -24,16 +24,6 @@
  * 
  */
 
-/*
- * PATRONES DE DISEÑO - Programacion 1
- * 
- * DEFINICION: Soluciones reutilizables para problemas comunes en desarrollo de software.
- * 
- * TIPOS:
- * - Creacionales: Creacion de objetos (Singleton, Factory)
- * - Estructurales: Composicion de clases (Adapter, Decorator)
- * - Comportamiento: Interaccion entre objetos (Observer, Strategy)
- */
 
 using System;
 using System.Collections.Generic;
@@ -201,4 +191,5 @@ namespace PatronesDeDiseno
             estacion.CambiarTemperatura(32);
         }
     }
+
 }
