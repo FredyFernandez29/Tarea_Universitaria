@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace SistemaNotasEscolares
 {
-    // ─── interfaces ──────────────────────────────────────────────────────────
+    // --- interfaces ----------------------------------------------------------
     interface IEntidad
     {
         int Id { get; set; }
         string Nombre { get; set; }
     }
 
-    // ─── clases base ──────────────────────────────────────────────────────────
+    // --- clases base ----------------------------------------------------------
     public abstract class Persona : IEntidad
     {
         public int Id { get; set; }
@@ -18,7 +18,7 @@ namespace SistemaNotasEscolares
         public abstract string ObtenerResumen();
     }
 
-    // ─── entidades ────────────────────────────────────────────────────────────
+    // --- entidades ------------------------------------------------------------
     public class Estudiante : Persona
     {
         public int Grado { get; set; }
@@ -32,7 +32,7 @@ namespace SistemaNotasEscolares
     {
         public int Id { get; set; }
         public string Nombre { get; set; }
-        public int Creditos { get; set; }  // Nuevo: créditos de la materia
+        public int Creditos { get; set; }  // Nuevo: creditos de la materia
         public string ObtenerResumen()
         {
             return $"[{Id:D3}] {Nombre} ({Creditos} cr)";
@@ -46,7 +46,7 @@ namespace SistemaNotasEscolares
         public double Calificacion { get; set; }
     }
 
-    // ─── conversor de calificaciones ─────────────────────────────────────────
+    // --- conversor de calificaciones -----------------------------------------
     public static class ConversorCalificacion
     {
         public static string ObtenerLiteral(double calificacion)
@@ -70,7 +70,7 @@ namespace SistemaNotasEscolares
         public static bool EsAprobado(double calificacion) => calificacion >= 70;
     }
 
-    // ─── gestor central (incluye estadísticas) ───────────────────────────────
+    // --- gestor central (incluye estadisticas) -------------------------------
     public class GestorNotas
     {
         private List<Estudiante> estudiantes = new List<Estudiante>();
@@ -88,7 +88,7 @@ namespace SistemaNotasEscolares
         public const int CreditosMinimos = 1;
         public const int CreditosMaximos = 5;
 
-        // ─── CRUD básico ─────────────────────────────────────────────────────
+        // --- CRUD basico ------------------------------------------------------
         public void AgregarEstudiante(string nombre, int grado)
         {
             estudiantes.Add(new Estudiante { Id = siguienteIdEstudiante++, Nombre = nombre, Grado = grado });
@@ -119,7 +119,7 @@ namespace SistemaNotasEscolares
             return true;
         }
 
-        // Nueva: eliminar una nota específica
+        // Nueva: eliminar una nota especifica
         public bool EliminarNota(int estudianteId, int materiaId)
         {
             Nota nota = notas.Find(n => n.EstudianteId == estudianteId && n.MateriaId == materiaId);
@@ -147,7 +147,7 @@ namespace SistemaNotasEscolares
         public List<Estudiante> ObtenerEstudiantesPorGrado(int grado) =>
             estudiantes.FindAll(e => e.Grado == grado);
 
-        // ─── estadísticas de estudiante (con créditos) ────────────────────────
+        // --- estadisticas de estudiante (con creditos) -----------------------
         public double CalcularPromedioEstudiante(int estudianteId)
         {
             var notasEst = ObtenerNotasPorEstudiante(estudianteId);
@@ -157,7 +157,7 @@ namespace SistemaNotasEscolares
             return suma / notasEst.Count;
         }
 
-        // Promedio ponderado por créditos (GPA ponderado)
+        // Promedio ponderado por creditos (GPA ponderado)
         public double CalcularPromedioPonderadoEstudiante(int estudianteId)
         {
             var notasEst = ObtenerNotasPorEstudiante(estudianteId);
@@ -195,7 +195,7 @@ namespace SistemaNotasEscolares
             return min;
         }
 
-        // GPA ponderado por créditos usando puntos GPA
+        // GPA ponderado por creditos usando puntos GPA
         public double CalcularGpaEstudiante(int estudianteId)
         {
             var notasEst = ObtenerNotasPorEstudiante(estudianteId);
@@ -224,7 +224,7 @@ namespace SistemaNotasEscolares
             return "Reprobado";
         }
 
-        // ─── estadísticas de materia ─────────────────────────────────────────
+        // --- estadisticas de materia -----------------------------------------
         public double CalcularPromedioMateria(int materiaId)
         {
             var notasMat = ObtenerNotasPorMateria(materiaId);
@@ -265,7 +265,7 @@ namespace SistemaNotasEscolares
             ObtenerNotasPorMateria(materiaId).Count - ContarAprobadosMateria(materiaId);
     }
 
-    // ─── interfaz visual en terminal ─────────────────────────────────────────
+    // --- interfaz visual en terminal -----------------------------------------
     public static class Ui
     {
         private const int Ancho = 60;
@@ -384,16 +384,16 @@ namespace SistemaNotasEscolares
         }
     }
 
-    // ─── programa principal ───────────────────────────────────────────────────
+    // --- programa principal ---------------------------------------------------
     class Program
     {
         static GestorNotas gestor = new GestorNotas();
 
         static void Main(string[] args)
         {
-            Ui.Pantalla("SISTEMA DE GESTIÓN DE NOTAS ESCOLARES");
+            Ui.Pantalla("SISTEMA DE GESTION DE NOTAS ESCOLARES");
             Ui.Info("Literal: A(90-100) B(80-89) C(70-79) D(60-69) F(<60)");
-            Ui.Info("Aprobado desde 70 | GPA máximo: 4.00 (ponderado por créditos)");
+            Ui.Info("Aprobado desde 70 | GPA maximo: 4.00 (ponderado por creditos)");
             Ui.Separador();
             Pausa();
 
@@ -401,7 +401,7 @@ namespace SistemaNotasEscolares
             while (!salir)
             {
                 MostrarMenu();
-                Ui.EntradaPrompt("Opción");
+                Ui.EntradaPrompt("Opcion");
                 string opcion = Ui.Leer().Trim();
 
                 switch (opcion)
@@ -416,9 +416,9 @@ namespace SistemaNotasEscolares
                     case "8": EstadisticasGenerales(); break;
                     case "9": EstudiantesPorGrado(); break;
                     case "10": EliminarEstudiante(); break;
-                    case "11": EliminarNota(); break;      // Nueva opción
+                    case "11": EliminarNota(); break;      // Nueva opcion
                     case "12": salir = true; break;
-                    default: Ui.Error("Opción inválida."); break;
+                    default: Ui.Error("Opcion invalida."); break;
                 }
 
                 if (!salir) Pausa();
@@ -429,15 +429,15 @@ namespace SistemaNotasEscolares
 
         static void MostrarMenu()
         {
-            Ui.Pantalla("Menú Principal");
+            Ui.Pantalla("Menu Principal");
             Ui.OpcionMenu("1", "Agregar estudiante");
-            Ui.OpcionMenu("2", "Agregar materia (con créditos)");
+            Ui.OpcionMenu("2", "Agregar materia (con creditos)");
             Ui.OpcionMenu("3", "Agregar nota");
             Ui.OpcionMenu("4", "Ver todos los estudiantes");
             Ui.OpcionMenu("5", "Ver notas de un estudiante");
             Ui.OpcionMenu("6", "Resumen por materia");
-            Ui.OpcionMenu("7", "Estadísticas de un estudiante");
-            Ui.OpcionMenu("8", "Estadísticas generales");
+            Ui.OpcionMenu("7", "Estadisticas de un estudiante");
+            Ui.OpcionMenu("8", "Estadisticas generales");
             Ui.OpcionMenu("9", "Estudiantes por grado");
             Ui.OpcionMenu("10", "Eliminar estudiante");
             Ui.OpcionMenu("11", "Eliminar nota de estudiante");
@@ -459,7 +459,7 @@ namespace SistemaNotasEscolares
             Ui.EntradaPrompt(prompt);
             if (!int.TryParse(Ui.Leer(), out resultado))
             {
-                Ui.Error("Debe ingresar un número entero.");
+                Ui.Error("Debe ingresar un numero entero.");
                 return false;
             }
             return true;
@@ -470,7 +470,7 @@ namespace SistemaNotasEscolares
             Ui.EntradaPrompt(prompt);
             if (!double.TryParse(Ui.Leer(), out resultado))
             {
-                Ui.Error("Debe ingresar un número válido.");
+                Ui.Error("Debe ingresar un numero valido.");
                 return false;
             }
             return true;
@@ -498,13 +498,13 @@ namespace SistemaNotasEscolares
             Ui.LineaSimple();
         }
 
-        // ─── opciones del menú ────────────────────────────────────────────────
+        // --- opciones del menu ------------------------------------------------
         static void AgregarEstudiante()
         {
             Ui.Titulo("Agregar estudiante");
             Ui.EntradaPrompt("Nombre");
             string nombre = Ui.Leer();
-            if (string.IsNullOrWhiteSpace(nombre)) { Ui.Error("El nombre no puede estar vacío."); return; }
+            if (string.IsNullOrWhiteSpace(nombre)) { Ui.Error("El nombre no puede estar vacio."); return; }
 
             if (!LeerEntero("Grado (1 a 12)", out int grado)) return;
             if (grado < GestorNotas.GradoMinimo || grado > GestorNotas.GradoMaximo)
@@ -522,17 +522,17 @@ namespace SistemaNotasEscolares
             Ui.Titulo("Agregar materia");
             Ui.EntradaPrompt("Nombre");
             string nombre = Ui.Leer();
-            if (string.IsNullOrWhiteSpace(nombre)) { Ui.Error("El nombre no puede estar vacío."); return; }
+            if (string.IsNullOrWhiteSpace(nombre)) { Ui.Error("El nombre no puede estar vacio."); return; }
 
-            if (!LeerEntero($"Créditos ({GestorNotas.CreditosMinimos} a {GestorNotas.CreditosMaximos})", out int creditos)) return;
+            if (!LeerEntero($"Creditos ({GestorNotas.CreditosMinimos} a {GestorNotas.CreditosMaximos})", out int creditos)) return;
             if (creditos < GestorNotas.CreditosMinimos || creditos > GestorNotas.CreditosMaximos)
             {
-                Ui.Error($"Los créditos deben estar entre {GestorNotas.CreditosMinimos} y {GestorNotas.CreditosMaximos}.");
+                Ui.Error($"Los creditos deben estar entre {GestorNotas.CreditosMinimos} y {GestorNotas.CreditosMaximos}.");
                 return;
             }
 
             gestor.AgregarMateria(nombre, creditos);
-            Ui.Exito($"Materia '{nombre}' con {creditos} créditos agregada.");
+            Ui.Exito($"Materia '{nombre}' con {creditos} creditos agregada.");
         }
 
         static void AgregarNota()
@@ -556,7 +556,7 @@ namespace SistemaNotasEscolares
             var notasExistentes = gestor.ObtenerNotasPorEstudiante(estudianteId);
             if (notasExistentes.Exists(n => n.MateriaId == materiaId))
             {
-                Ui.Error("El estudiante ya tiene una nota en esta materia. Use la opción de eliminar nota si desea cambiarla.");
+                Ui.Error("El estudiante ya tiene una nota en esta materia. Use la opcion de eliminar nota si desea cambiarla.");
                 return;
             }
 
@@ -656,10 +656,10 @@ namespace SistemaNotasEscolares
             int aprobados = gestor.ContarAprobadosMateria(id);
             int reprobados = gestor.ContarReprobadosMateria(id);
 
-            Ui.Fila("Materia", $"{materia.Nombre} ({materia.Creditos} créditos)");
+            Ui.Fila("Materia", $"{materia.Nombre} ({materia.Creditos} creditos)");
             Ui.Fila("Promedio del grupo", $"{promedio:F2}  ({ConversorCalificacion.ObtenerLiteral(promedio)})");
-            Ui.Fila("Nota más alta", $"{max:F2}");
-            Ui.Fila("Nota más baja", $"{min:F2}");
+            Ui.Fila("Nota mas alta", $"{max:F2}");
+            Ui.Fila("Nota mas baja", $"{min:F2}");
             Ui.Fila("Total estudiantes", $"{notas.Count}");
             Ui.Fila("Aprobados", $"{aprobados}");
             Ui.Fila("Reprobados", $"{reprobados}");
@@ -688,7 +688,7 @@ namespace SistemaNotasEscolares
 
         static void EstadisticasEstudiante()
         {
-            Ui.Titulo("Estadísticas de estudiante");
+            Ui.Titulo("Estadisticas de estudiante");
             if (gestor.ObtenerEstudiantes().Count == 0) { Ui.Error("No hay estudiantes registrados."); return; }
 
             MostrarListaEstudiantes();
@@ -709,11 +709,11 @@ namespace SistemaNotasEscolares
 
             Ui.Fila("Estudiante", nombre);
             Ui.Fila("Promedio simple", $"{promedioSimple:F2}");
-            Ui.Fila("Promedio ponderado (por créditos)", $"{promedioPonderado:F2}");
+            Ui.Fila("Promedio ponderado (por creditos)", $"{promedioPonderado:F2}");
             Ui.Fila("Literal", literal);
             Ui.Fila("GPA ponderado", $"{gpa:F2} / 4.00");
-            Ui.Fila("Nota máxima", $"{max:F2}");
-            Ui.Fila("Nota mínima", $"{min:F2}");
+            Ui.Fila("Nota maxima", $"{max:F2}");
+            Ui.Fila("Nota minima", $"{min:F2}");
             Ui.Fila("Materias cursadas", $"{notas.Count}");
             Ui.FilaEstado("Estado", estado, ConversorCalificacion.EsAprobado(promedioSimple));
             Ui.LineaSimple();
@@ -721,7 +721,7 @@ namespace SistemaNotasEscolares
 
         static void EstadisticasGenerales()
         {
-            Ui.Titulo("Estadísticas generales del colegio");
+            Ui.Titulo("Estadisticas generales del colegio");
             var estudiantes = gestor.ObtenerEstudiantes();
             if (estudiantes.Count == 0) { Ui.Error("No hay estudiantes registrados."); return; }
 
@@ -823,9 +823,9 @@ namespace SistemaNotasEscolares
             if (!gestor.EstudianteExiste(id)) { Ui.Error("El estudiante no existe."); return; }
 
             string nombre = gestor.ObtenerNombreEstudiante(id);
-            Ui.EntradaPrompt($"Confirmar eliminación de '{nombre}' (s/n)");
+            Ui.EntradaPrompt($"Confirmar eliminacion de '{nombre}' (s/n)");
             string confirm = Ui.Leer().Trim().ToLower();
-            if (confirm != "s") { Ui.Info("Operación cancelada."); return; }
+            if (confirm != "s") { Ui.Info("Operacion cancelada."); return; }
 
             if (gestor.EliminarEstudiante(id))
                 Ui.Exito($"'{nombre}' eliminado junto con sus notas.");
@@ -870,9 +870,9 @@ namespace SistemaNotasEscolares
                 return;
             }
 
-            Ui.EntradaPrompt("¿Está seguro de eliminar esta nota? (s/n)");
+            Ui.EntradaPrompt("¿Esta seguro de eliminar esta nota? (s/n)");
             string confirm = Ui.Leer().Trim().ToLower();
-            if (confirm != "s") { Ui.Info("Operación cancelada."); return; }
+            if (confirm != "s") { Ui.Info("Operacion cancelada."); return; }
 
             if (gestor.EliminarNota(estudianteId, materiaId))
                 Ui.Exito("Nota eliminada correctamente.");
